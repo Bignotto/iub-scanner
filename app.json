@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "iub-scanner",
+    "slug": "iub-scanner",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "iub-scanner"
+}
