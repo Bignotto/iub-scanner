@@ -1,25 +1,26 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useState } from "react";
 import { Alert } from "react-native";
 import { Button } from "../../components/Button";
-import ScannerComponent from "../../components/ScannerComponent";
+import { useScan } from "../../hooks/scan";
 import {
   Container,
   Header,
   ScreenTitle,
   ScannerWrapper,
+  ReadingInfoContainer,
+  SerialNumber,
   Footer,
 } from "./styles";
 
-export default function Reading() {
-  const navigation = useNavigation();
+type NavigationProps = {
+  navigate: (screen: string) => void;
+  goBack: () => void;
+};
 
-  async function handleScan(scannedText: string) {
-    console.log({ scannedText });
-    if (scannedText.length !== 24) {
-      return Alert.alert("Inválido", "Código de barras inválido");
-    }
-  }
+export default function Reading() {
+  const navigation = useNavigation<NavigationProps>();
+  const { serials } = useScan();
 
   return (
     <Container>
@@ -27,7 +28,12 @@ export default function Reading() {
         <ScreenTitle>Leitura</ScreenTitle>
       </Header>
       <ScannerWrapper>
-        <ScannerComponent handleScan={handleScan} />
+        <ReadingInfoContainer>
+          {serials.map((s, i) => (
+            <SerialNumber key={`${s.id}${i}`}> {s.id} </SerialNumber>
+          ))}
+        </ReadingInfoContainer>
+        <Button title="SCAN" onPress={() => navigation.navigate("Scan")} />
       </ScannerWrapper>
       <Footer>
         <Button title="Voltar" onPress={() => navigation.goBack()} />

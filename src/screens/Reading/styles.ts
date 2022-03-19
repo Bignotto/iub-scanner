@@ -23,6 +23,10 @@ export const ScannerWrapper = styled.View`
   flex: 1;
 `;
 
+export const ReadingInfoContainer = styled.View``;
+
+export const SerialNumber = styled.Text``;
+
 export const Footer = styled.View`
   width: 100%;
   background-color: ${({ theme }) => theme.colors.primary};

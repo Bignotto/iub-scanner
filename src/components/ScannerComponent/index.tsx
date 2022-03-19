@@ -2,22 +2,19 @@ import React, { useEffect, useState } from "react";
 import { Text, Button, Dimensions } from "react-native";
 import { BarCodeScanner } from "expo-barcode-scanner";
 import { useNavigation } from "@react-navigation/native";
+import { useScan } from "../../hooks/scan";
 
 interface ScannerProps {
   type: string;
   data: string;
 }
 
-interface ScannerComponentProps {
-  handleScan(scannedText: string): void;
-}
-
-export default function ScannerComponent({
-  handleScan,
-}: ScannerComponentProps) {
+export default function ScannerComponent() {
   const navigation = useNavigation();
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
+
+  const { handleScan } = useScan();
 
   useEffect(() => {
     (async () => {

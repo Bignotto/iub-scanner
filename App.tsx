@@ -14,6 +14,7 @@ import {
 } from "@expo-google-fonts/inconsolata";
 
 import theme from "./src/global/styles/theme";
+import { ScanProvider } from "./src/hooks/scan";
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -27,10 +28,12 @@ export default function App() {
   }
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer>
-        <StatusBar style="dark" />
-        <Routes />
-      </NavigationContainer>
+      <ScanProvider>
+        <NavigationContainer>
+          <StatusBar style="dark" />
+          <Routes />
+        </NavigationContainer>
+      </ScanProvider>
     </ThemeProvider>
   );
 }

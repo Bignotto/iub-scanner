@@ -27,6 +27,7 @@ const Home: React.FC = () => {
       ? JSON.parse(storageData)
       : [];
 
+    console.log(serials);
     setSerialsData(serials);
   }
 
