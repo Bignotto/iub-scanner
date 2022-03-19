@@ -7,7 +7,7 @@ interface ScannerProps {
   data: string;
 }
 
-export default function App() {
+export default function Scanner() {
   const [hasPermission, setHasPermission] = useState(false);
   const [scanned, setScanned] = useState(false);
 
