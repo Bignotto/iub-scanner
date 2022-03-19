@@ -1,5 +1,6 @@
+import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { Button } from "../../components/Button";
 
@@ -9,11 +10,32 @@ type NavigationProps = {
   navigate: (screen: string) => void;
 };
 
+interface ISerialDataProps {
+  product: string;
+  quantity: number;
+}
+
 const Home: React.FC = () => {
   const navigation = useNavigation<NavigationProps>();
+  const [serialsData, setSerialsData] = useState<ISerialDataProps[]>([]);
+
+  async function loadSerials() {
+    const dataKey = "@iubscanner/serials";
+
+    const storageData = await AsyncStorage.getItem(dataKey);
+    const serials: ISerialDataProps[] = storageData
+      ? JSON.parse(storageData)
+      : [];
+
+    setSerialsData(serials);
+  }
+
+  useEffect(() => {
+    loadSerials();
+  }, []);
 
   function handleButton() {
-    navigation.navigate("Scanner");
+    navigation.navigate("Reading");
   }
   return (
     <Container>
