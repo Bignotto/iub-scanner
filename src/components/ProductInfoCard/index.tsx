@@ -10,7 +10,7 @@ interface ProductInfoCardProps {
 export function ProductInfoCard({ product }: ProductInfoCardProps) {
   return (
     <Container>
-      <ProductInfoText>{product}.....10</ProductInfoText>
+      <ProductInfoText>{product}</ProductInfoText>
       <ButtonsWrapper>
         <Button iconName="edit" />
         <Button iconName="trash-2" />

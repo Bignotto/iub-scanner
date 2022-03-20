@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import React, { useCallback, useEffect, useState } from "react";
+import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { Button } from "../../components/Button";
@@ -35,6 +35,12 @@ const Home: React.FC = () => {
     loadSerials();
   }, []);
 
+  useFocusEffect(
+    useCallback(() => {
+      loadSerials();
+    }, [])
+  );
+
   function handleReadingButton() {
     navigation.navigate("Reading");
   }
@@ -43,6 +49,7 @@ const Home: React.FC = () => {
     try {
       const keys = await AsyncStorage.getAllKeys();
       await AsyncStorage.multiRemove(keys);
+      setSerialsData([]);
     } catch (error) {
       Alert.alert("Erro", "Erro ao limpar os dados.");
     }
@@ -53,9 +60,9 @@ const Home: React.FC = () => {
         <ScreenTitle>Inventário</ScreenTitle>
       </Header>
       <Content>
-        <ProductInfoCard product="I02536" />
-        <ProductInfoCard product="I01384" />
-        <ProductInfoCard product="I01441" />
+        {serialsData.map((p) => (
+          <ProductInfoCard product={`${p.product}.....${p.quantity}`} />
+        ))}
         <Button title="Leitura" onPress={handleReadingButton} />
         <Button title="Limpar" onPress={handleCleanData} />
         <Button title="Exportar" />
