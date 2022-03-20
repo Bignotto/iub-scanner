@@ -26,12 +26,3 @@ export const ButtonsWrapper = styled.View`
   flex-direction: row;
   justify-content: space-between;
 `;
-
-export const EditButton = styled.View``;
-
-export const DeleteButton = styled.View``;
-
-export const Icon = styled(Feather)`
-  font-size: ${RFValue(24)}px;
-  color: ${({ theme }) => theme.colors.text};
-`;

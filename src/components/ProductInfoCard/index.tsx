@@ -1,13 +1,7 @@
 import React from "react";
+import { Button } from "./Button";
 
-import {
-  Container,
-  ProductInfoText,
-  ButtonsWrapper,
-  EditButton,
-  DeleteButton,
-  Icon,
-} from "./styles";
+import { Container, ProductInfoText, ButtonsWrapper } from "./styles";
 
 interface ProductInfoCardProps {
   product: string;
@@ -18,8 +12,8 @@ export function ProductInfoCard({ product }: ProductInfoCardProps) {
     <Container>
       <ProductInfoText>{product}.....10</ProductInfoText>
       <ButtonsWrapper>
-        <Icon name="edit" />
-        <Icon name="trash-2" />
+        <Button iconName="edit" />
+        <Button iconName="trash-2" />
       </ButtonsWrapper>
     </Container>
   );
