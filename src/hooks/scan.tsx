@@ -24,6 +24,7 @@ function ScanProvider({ children }: ScanProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [serials, setSerials] = useState<Serial[]>([]);
 
+  //TODO: move this logic eslewhere
   async function updateSerial(product: string) {
     const dataKey = "@iubscanner/serials";
 
@@ -77,8 +78,6 @@ function ScanProvider({ children }: ScanProviderProps) {
     //I00046201911011514180047
     const product = scannedText.substring(0, 6);
     const dataKey = `@iubscanner/serials/${product}`;
-
-    //update @iubscanner/serials for this product
 
     const newSerial: Serial = {
       id: scannedText,

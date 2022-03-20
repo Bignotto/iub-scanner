@@ -2,6 +2,9 @@ export default {
   colors: {
     primary: "#5636D3",
 
+    azul_iub: "#215DA5",
+    azul_iub2: "#1C64A8",
+
     secondary: "#FF872C",
     secondary_light: "rgba(255,135,44,0.3)",
 

@@ -5,6 +5,8 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Button } from "../../components/Button";
 
 import { Container, ScreenTitle, Header, Content } from "./styles";
+import { Alert } from "react-native";
+import { ProductInfoCard } from "../../components/ProductInfoCard";
 
 type NavigationProps = {
   navigate: (screen: string) => void;
@@ -26,8 +28,6 @@ const Home: React.FC = () => {
     const serials: ISerialDataProps[] = storageData
       ? JSON.parse(storageData)
       : [];
-
-    console.log(serials);
     setSerialsData(serials);
   }
 
@@ -35,8 +35,17 @@ const Home: React.FC = () => {
     loadSerials();
   }, []);
 
-  function handleButton() {
+  function handleReadingButton() {
     navigation.navigate("Reading");
+  }
+
+  async function handleCleanData() {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      await AsyncStorage.multiRemove(keys);
+    } catch (error) {
+      Alert.alert("Erro", "Erro ao limpar os dados.");
+    }
   }
   return (
     <Container>
@@ -44,9 +53,12 @@ const Home: React.FC = () => {
         <ScreenTitle>Inventário</ScreenTitle>
       </Header>
       <Content>
-        <Button title="Botão de ação!" onPress={handleButton} />
-        <Button title="Botão de ação!" />
-        <Button title="Botão de ação!" />
+        <ProductInfoCard product="I02536" />
+        <ProductInfoCard product="I01384" />
+        <ProductInfoCard product="I01441" />
+        <Button title="Leitura" onPress={handleReadingButton} />
+        <Button title="Limpar" onPress={handleCleanData} />
+        <Button title="Exportar" />
       </Content>
     </Container>
   );
