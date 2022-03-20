@@ -8,7 +8,7 @@ export const Container = styled.View`
 
 export const ScreenTitle = styled.Text`
   padding: 0 10px;
-  font-family: ${({ theme }) => theme.fonts.bold};
+  font-family: ${({ theme }) => theme.fonts.rotobo.black};
   font-size: ${RFValue(24)}px;
 `;
 
@@ -22,6 +22,10 @@ export const ScannerWrapper = styled.View`
   width: 100%;
   flex: 1;
 `;
+
+export const ReadingInfoContainer = styled.View``;
+
+export const SerialNumber = styled.Text``;
 
 export const Footer = styled.View`
   width: 100%;
