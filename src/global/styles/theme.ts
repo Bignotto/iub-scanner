@@ -31,8 +31,16 @@ export default {
   },
 
   fonts: {
-    regular: "Inconsolata_400Regular",
-    medium: "Inconsolata_500Medium",
-    bold: "Inconsolata_700Bold",
+    inconsolata: {
+      regular: "Inconsolata_400Regular",
+      medium: "Inconsolata_500Medium",
+      bold: "Inconsolata_700Bold",
+    },
+    rotobo: {
+      regular: "Roboto_400Regular",
+      medium: "Roboto_500Medium",
+      bold: "Roboto_700Bold",
+      black: "Roboto_900Black",
+    },
   },
 };

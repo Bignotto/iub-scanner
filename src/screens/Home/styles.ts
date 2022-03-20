@@ -8,7 +8,7 @@ export const Container = styled.View`
 
 export const ScreenTitle = styled.Text`
   padding: 0 12px;
-  font-family: ${({ theme }) => theme.fonts.bold};
+  font-family: ${({ theme }) => theme.fonts.rotobo.black};
   font-size: ${RFValue(24)}px;
 `;
 

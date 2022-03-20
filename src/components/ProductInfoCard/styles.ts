@@ -17,7 +17,7 @@ export const Container = styled.View`
 `;
 
 export const ProductInfoText = styled.Text`
-  font-family: ${({ theme }) => theme.fonts.regular};
+  font-family: ${({ theme }) => theme.fonts.inconsolata.medium};
   font-size: ${RFValue(24)}px;
 `;
 
