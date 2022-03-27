@@ -67,7 +67,10 @@ const Home: React.FC = () => {
       </Header>
       <Content>
         {serialsData.map((p) => (
-          <ProductInfoCard product={`${p.product}.....${p.quantity}`} />
+          <ProductInfoCard
+            product={`${p.product}.....${p.quantity}`}
+            key={p.product}
+          />
         ))}
         <Button title="Leitura" onPress={handleReadingButton} />
         <Button title="Limpar" onPress={handleCleanData} />

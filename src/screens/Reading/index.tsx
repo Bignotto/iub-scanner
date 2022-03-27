@@ -26,11 +26,10 @@ type ReadingProps = {
 
 export default function Reading() {
   const navigation = useNavigation<NavigationProps>();
-  const { serials } = useScan();
   const route = useRoute<RouteProp<ReadingProps, "Reading">>();
 
   const { product } = route.params;
-  console.log({ product });
+  const { serials } = useScan();
 
   return (
     <Container>

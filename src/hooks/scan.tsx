@@ -78,8 +78,6 @@ function ScanProvider({ children }: ScanProviderProps) {
     const scannedProduct = scannedText.substring(0, 6);
     const dataKey = `@iubscanner/serials/${scannedProduct}`;
 
-    console.log({ scannedProduct, product });
-
     if (product !== scannedProduct && product.length !== 0)
       return Alert.alert(
         "Inválido",
@@ -96,9 +94,11 @@ function ScanProvider({ children }: ScanProviderProps) {
       // await AsyncStorage.clear();
       await updateSerial(scannedProduct);
       const storageData = await AsyncStorage.getItem(dataKey);
-      const serials = storageData ? JSON.parse(storageData) : [];
+      const storageSerials = storageData ? JSON.parse(storageData) : [];
 
-      const newSerials = [...serials, newSerial];
+      const newSerials = [...storageSerials, newSerial];
+
+      //TODO: check for duplicated serials
 
       setSerials(newSerials);
       await AsyncStorage.setItem(dataKey, JSON.stringify(newSerials));
