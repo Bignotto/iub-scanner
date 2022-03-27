@@ -1,5 +1,5 @@
-import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import { RouteProp, useNavigation, useRoute } from "@react-navigation/native";
+import React, { useEffect, useState } from "react";
 import { Alert } from "react-native";
 import { Button } from "../../components/Button";
 import { useScan } from "../../hooks/scan";
@@ -18,9 +18,19 @@ type NavigationProps = {
   goBack: () => void;
 };
 
+type ReadingProps = {
+  Reading: {
+    product: string;
+  };
+};
+
 export default function Reading() {
   const navigation = useNavigation<NavigationProps>();
   const { serials } = useScan();
+  const route = useRoute<RouteProp<ReadingProps, "Reading">>();
+
+  const { product } = route.params;
+  console.log({ product });
 
   return (
     <Container>
