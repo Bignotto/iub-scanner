@@ -26,7 +26,7 @@ function ScanProvider({ children }: ScanProviderProps) {
   const [product, setProduct] = useState("");
 
   //TODO: move this logic eslewhere
-  async function updateSerial(product: string) {
+  async function updateProductCount(product: string) {
     const dataKey = "@iubscanner/serials";
     const storageData = await AsyncStorage.getItem(dataKey);
     const storedProducts: SerialDataProps[] = storageData
@@ -92,7 +92,7 @@ function ScanProvider({ children }: ScanProviderProps) {
 
     try {
       // await AsyncStorage.clear();
-      await updateSerial(scannedProduct);
+      await updateProductCount(scannedProduct);
       const storageData = await AsyncStorage.getItem(dataKey);
       const storageSerials = storageData ? JSON.parse(storageData) : [];
 

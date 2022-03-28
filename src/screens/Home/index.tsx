@@ -68,7 +68,8 @@ const Home: React.FC = () => {
       <Content>
         {serialsData.map((p) => (
           <ProductInfoCard
-            product={`${p.product}.....${p.quantity}`}
+            product={p.product}
+            quantity={p.quantity}
             key={p.product}
           />
         ))}
