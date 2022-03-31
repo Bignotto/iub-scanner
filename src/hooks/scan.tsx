@@ -88,6 +88,7 @@ function ScanProvider({ children }: ScanProviderProps) {
     const newSerial: Serial = {
       id: scannedText,
       product: scannedProduct,
+      timestamp: new Date().getTime(),
     };
 
     try {
