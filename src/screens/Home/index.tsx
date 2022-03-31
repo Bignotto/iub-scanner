@@ -8,8 +8,12 @@ import { Container, ScreenTitle, Header, Content } from "./styles";
 import { Alert } from "react-native";
 import { ProductInfoCard } from "../../components/ProductInfoCard";
 
+type RouteProps = {
+  product: string;
+};
+
 type NavigationProps = {
-  navigate: (screen: string) => void;
+  navigate: (screen: string, props: RouteProps) => void;
 };
 
 interface ISerialDataProps {
@@ -42,7 +46,9 @@ const Home: React.FC = () => {
   );
 
   function handleReadingButton() {
-    navigation.navigate("Reading");
+    navigation.navigate("Reading", {
+      product: "NEW",
+    });
   }
 
   async function handleCleanData() {
@@ -61,7 +67,11 @@ const Home: React.FC = () => {
       </Header>
       <Content>
         {serialsData.map((p) => (
-          <ProductInfoCard product={`${p.product}.....${p.quantity}`} />
+          <ProductInfoCard
+            product={p.product}
+            quantity={p.quantity}
+            key={p.product}
+          />
         ))}
         <Button title="Leitura" onPress={handleReadingButton} />
         <Button title="Limpar" onPress={handleCleanData} />

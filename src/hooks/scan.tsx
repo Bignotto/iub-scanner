@@ -23,12 +23,11 @@ const ScanContext = createContext({} as IScanContextData);
 function ScanProvider({ children }: ScanProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [serials, setSerials] = useState<Serial[]>([]);
+  const [product, setProduct] = useState("");
 
   //TODO: move this logic eslewhere
-  async function updateSerial(product: string) {
+  async function updateProductCount(product: string) {
     const dataKey = "@iubscanner/serials";
-
-    //await AsyncStorage.clear();
     const storageData = await AsyncStorage.getItem(dataKey);
     const storedProducts: SerialDataProps[] = storageData
       ? JSON.parse(storageData)
@@ -71,32 +70,44 @@ function ScanProvider({ children }: ScanProviderProps) {
   }
 
   async function handleScan(scannedText: string) {
-    console.log({ scannedText });
+    setIsLoading(true);
     if (scannedText.length !== 24) {
       return Alert.alert("Inválido", "Código de barras inválido");
     }
     //I00046201911011514180047
-    const product = scannedText.substring(0, 6);
-    const dataKey = `@iubscanner/serials/${product}`;
+    const scannedProduct = scannedText.substring(0, 6);
+    const dataKey = `@iubscanner/serials/${scannedProduct}`;
+
+    if (product !== scannedProduct && product.length !== 0)
+      return Alert.alert(
+        "Inválido",
+        "Você não pode ler produtos diferentes na mesma leitura!"
+      );
+    setProduct(scannedProduct);
 
     const newSerial: Serial = {
       id: scannedText,
-      product,
+      product: scannedProduct,
+      timestamp: new Date().getTime(),
     };
 
     try {
       // await AsyncStorage.clear();
-      await updateSerial(product);
+      await updateProductCount(scannedProduct);
       const storageData = await AsyncStorage.getItem(dataKey);
-      const serials = storageData ? JSON.parse(storageData) : [];
+      const storageSerials = storageData ? JSON.parse(storageData) : [];
 
-      const newSerials = [...serials, newSerial];
+      const newSerials = [...storageSerials, newSerial];
+
+      //TODO: check for duplicated serials
 
       setSerials(newSerials);
       await AsyncStorage.setItem(dataKey, JSON.stringify(newSerials));
     } catch (error) {
       console.log(error);
       Alert.alert("Algum proglema com async storage");
+    } finally {
+      setIsLoading(false);
     }
 
     return Alert.alert("Válido!", `produto ${product}`);
