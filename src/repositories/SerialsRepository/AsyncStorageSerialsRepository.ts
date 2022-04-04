@@ -27,3 +27,5 @@ class AsyncStorageSerialsRepository implements ISerialsRepository {
     throw new Error("Method not implemented.");
   }
 }
+
+export { AsyncStorageSerialsRepository };

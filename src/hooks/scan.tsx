@@ -2,6 +2,7 @@ import { createContext, ReactNode, useContext, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { Alert } from "react-native";
+import { AsyncStorageSerialsRepository } from "../repositories/SerialsRepository/AsyncStorageSerialsRepository";
 
 interface ScanProviderProps {
   children: ReactNode;
@@ -19,6 +20,7 @@ interface IScanContextData {
 }
 
 const ScanContext = createContext({} as IScanContextData);
+const serialsRepository = new AsyncStorageSerialsRepository();
 
 function ScanProvider({ children }: ScanProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
@@ -76,33 +78,12 @@ function ScanProvider({ children }: ScanProviderProps) {
     }
     //I00046201911011514180047
     const scannedProduct = scannedText.substring(0, 6);
-    const dataKey = `@iubscanner/serials/${scannedProduct}`;
 
-    if (product !== scannedProduct && product.length !== 0)
-      return Alert.alert(
-        "Inválido",
-        "Você não pode ler produtos diferentes na mesma leitura!"
-      );
     setProduct(scannedProduct);
-
-    const newSerial: Serial = {
-      id: scannedText,
-      product: scannedProduct,
-      timestamp: new Date().getTime(),
-    };
 
     try {
       // await AsyncStorage.clear();
-      await updateProductCount(scannedProduct);
-      const storageData = await AsyncStorage.getItem(dataKey);
-      const storageSerials = storageData ? JSON.parse(storageData) : [];
-
-      const newSerials = [...storageSerials, newSerial];
-
-      //TODO: check for duplicated serials
-
-      setSerials(newSerials);
-      await AsyncStorage.setItem(dataKey, JSON.stringify(newSerials));
+      await serialsRepository.create(scannedText, scannedProduct);
     } catch (error) {
       console.log(error);
       Alert.alert("Algum proglema com async storage");
