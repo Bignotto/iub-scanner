@@ -22,26 +22,18 @@ interface ProductCountProps {
 
 const Home: React.FC = () => {
   const navigation = useNavigation<NavigationProps>();
-  const [serialsData, setSerialsData] = useState<Serial[]>([]);
   const [productsCounter, setProductsCounter] = useState<Map<string, number>>(
     new Map<string, number>()
   );
 
   async function loadSerials() {
-    const dataKey = "@iubscanner/serials";
-    // const productsCount: ProductCountProps = {};
     const newCounter = new Map<string, number>();
+    const dataKey = "@iubscanner/serials";
 
     const storageData = await AsyncStorage.getItem(dataKey);
     const serials: Serial[] = storageData ? JSON.parse(storageData) : [];
 
-    // serialsData.forEach((s) => {
-    //   const product = s.id.substring(0, 6);
-    //   if (!productsCount[product]) productsCount[product] = 1;
-    //   else productsCount[product]++;
-    // });
-
-    serialsData.forEach((s) => {
+    serials.forEach((s) => {
       const product = s.id.substring(0, 6);
       const actCount = newCounter.get(product);
 
@@ -55,7 +47,6 @@ const Home: React.FC = () => {
 
     console.log({ newCounter, serials });
     setProductsCounter(newCounter);
-    setSerialsData(serials);
   }
 
   useEffect(() => {
@@ -78,21 +69,24 @@ const Home: React.FC = () => {
     try {
       const keys = await AsyncStorage.getAllKeys();
       await AsyncStorage.multiRemove(keys);
-      setSerialsData([]);
     } catch (error) {
       Alert.alert("Erro", "Erro ao limpar os dados.");
     }
   }
+
   return (
     <Container>
       <Header>
         <ScreenTitle>Inventário</ScreenTitle>
       </Header>
       <Content>
-        {productsCounter.forEach((count, prod) => {
-          console.log(count, prod);
-          return <ProductInfoCard product={prod} quantity={count} key={prod} />;
-        })}
+        {[...productsCounter.keys()].map((prod) => (
+          <ProductInfoCard
+            product={prod}
+            quantity={productsCounter.get(prod)}
+            key={prod}
+          />
+        ))}
         <Button title="Leitura" onPress={handleReadingButton} />
         <Button title="Limpar" onPress={handleCleanData} />
         <Button title="Exportar" />

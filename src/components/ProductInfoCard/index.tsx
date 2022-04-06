@@ -6,7 +6,7 @@ import { Container, ProductInfoText, ButtonsWrapper } from "./styles";
 
 interface ProductInfoCardProps {
   product: string;
-  quantity: number;
+  quantity?: number;
 }
 
 type RouteProps = {
