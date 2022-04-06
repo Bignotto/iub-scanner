@@ -30,6 +30,16 @@ class AsyncStorageSerialsRepository implements ISerialsRepository {
     return serials;
   }
 
+  async deleteByProduct(product: string): Promise<void> {
+    const dataKey = "@iubscanner/serials";
+
+    const serials = await this.list();
+
+    const filteredSerials = serials.filter((s) => s.product !== product);
+
+    await AsyncStorage.setItem(dataKey, JSON.stringify(filteredSerials));
+  }
+
   update(serial: string): Promise<Serial> {
     throw new Error("Method not implemented.");
   }

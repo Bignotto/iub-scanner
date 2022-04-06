@@ -75,6 +75,21 @@ const Home: React.FC = () => {
     }
   }
 
+  async function handleDeleteByProduct(product: string) {
+    try {
+      await serialsRepository.deleteByProduct(product);
+      await loadSerials();
+    } catch (error) {
+      Alert.alert("Erro", `Erro ao apagar os seriais do produto ${product}`);
+    }
+  }
+
+  function handleEditProduct(product: string) {
+    navigation.navigate("Reading", {
+      product,
+    });
+  }
+
   return (
     <Container>
       <Header>
@@ -86,6 +101,8 @@ const Home: React.FC = () => {
             product={prod}
             quantity={productsCounter.get(prod)}
             key={prod}
+            handleDelete={handleDeleteByProduct}
+            handleEdit={handleEditProduct}
           />
         ))}
         <Button title="Leitura" onPress={handleReadingButton} />
