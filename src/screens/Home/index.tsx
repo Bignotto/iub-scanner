@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Alert } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AsyncStorageSerialsRepository } from "../../repositories/SerialsRepository/AsyncStorageSerialsRepository";
 
 import { Button } from "../../components/Button";
 
 import { Container, ScreenTitle, Header, Content } from "./styles";
-import { Alert } from "react-native";
 import { ProductInfoCard } from "../../components/ProductInfoCard";
 
 type RouteProps = {
@@ -21,17 +22,18 @@ interface ProductCountProps {
 }
 
 const Home: React.FC = () => {
+  const serialsRepository = new AsyncStorageSerialsRepository();
+
   const navigation = useNavigation<NavigationProps>();
   const [productsCounter, setProductsCounter] = useState<Map<string, number>>(
     new Map<string, number>()
   );
 
+  //TODO: move grouping logic elsewhere
   async function loadSerials() {
     const newCounter = new Map<string, number>();
-    const dataKey = "@iubscanner/serials";
 
-    const storageData = await AsyncStorage.getItem(dataKey);
-    const serials: Serial[] = storageData ? JSON.parse(storageData) : [];
+    const serials = await serialsRepository.list();
 
     serials.forEach((s) => {
       const product = s.id.substring(0, 6);
@@ -45,7 +47,6 @@ const Home: React.FC = () => {
       newCounter.set(product, actCount + 1);
     });
 
-    console.log({ newCounter, serials });
     setProductsCounter(newCounter);
   }
 
