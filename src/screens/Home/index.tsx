@@ -1,11 +1,12 @@
 import React, { useCallback, useEffect, useState } from "react";
+import { Alert } from "react-native";
 import { useFocusEffect, useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { AsyncStorageSerialsRepository } from "../../repositories/SerialsRepository/AsyncStorageSerialsRepository";
 
 import { Button } from "../../components/Button";
 
 import { Container, ScreenTitle, Header, Content } from "./styles";
-import { Alert } from "react-native";
 import { ProductInfoCard } from "../../components/ProductInfoCard";
 
 type RouteProps = {
@@ -16,23 +17,37 @@ type NavigationProps = {
   navigate: (screen: string, props: RouteProps) => void;
 };
 
-interface ISerialDataProps {
-  product: string;
-  quantity: number;
+interface ProductCountProps {
+  [key: string]: number;
 }
 
 const Home: React.FC = () => {
+  const serialsRepository = new AsyncStorageSerialsRepository();
+
   const navigation = useNavigation<NavigationProps>();
-  const [serialsData, setSerialsData] = useState<ISerialDataProps[]>([]);
+  const [productsCounter, setProductsCounter] = useState<Map<string, number>>(
+    new Map<string, number>()
+  );
 
+  //TODO: move grouping logic elsewhere
   async function loadSerials() {
-    const dataKey = "@iubscanner/serials";
+    const newCounter = new Map<string, number>();
 
-    const storageData = await AsyncStorage.getItem(dataKey);
-    const serials: ISerialDataProps[] = storageData
-      ? JSON.parse(storageData)
-      : [];
-    setSerialsData(serials);
+    const serials = await serialsRepository.list();
+
+    serials.forEach((s) => {
+      const product = s.id.substring(0, 6);
+      const actCount = newCounter.get(product);
+
+      if (!actCount) {
+        newCounter.set(product, 1);
+        return;
+      }
+
+      newCounter.set(product, actCount + 1);
+    });
+
+    setProductsCounter(newCounter);
   }
 
   useEffect(() => {
@@ -55,22 +70,39 @@ const Home: React.FC = () => {
     try {
       const keys = await AsyncStorage.getAllKeys();
       await AsyncStorage.multiRemove(keys);
-      setSerialsData([]);
     } catch (error) {
       Alert.alert("Erro", "Erro ao limpar os dados.");
     }
   }
+
+  async function handleDeleteByProduct(product: string) {
+    try {
+      await serialsRepository.deleteByProduct(product);
+      await loadSerials();
+    } catch (error) {
+      Alert.alert("Erro", `Erro ao apagar os seriais do produto ${product}`);
+    }
+  }
+
+  function handleEditProduct(product: string) {
+    navigation.navigate("Reading", {
+      product,
+    });
+  }
+
   return (
     <Container>
       <Header>
         <ScreenTitle>Inventário</ScreenTitle>
       </Header>
       <Content>
-        {serialsData.map((p) => (
+        {[...productsCounter.keys()].map((prod) => (
           <ProductInfoCard
-            product={p.product}
-            quantity={p.quantity}
-            key={p.product}
+            product={prod}
+            quantity={productsCounter.get(prod)}
+            key={prod}
+            handleDelete={handleDeleteByProduct}
+            handleEdit={handleEditProduct}
           />
         ))}
         <Button title="Leitura" onPress={handleReadingButton} />
