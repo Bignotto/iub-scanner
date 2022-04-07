@@ -5,11 +5,11 @@ import {
   useRoute,
 } from "@react-navigation/native";
 import React, { useCallback, useEffect, useState } from "react";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Alert } from "react-native";
 
 import { Button } from "../../components/Button";
 import { useScan } from "../../hooks/scan";
+import { AsyncStorageSerialsRepository } from "../../repositories/SerialsRepository/AsyncStorageSerialsRepository";
 import {
   Container,
   Header,
@@ -32,23 +32,21 @@ type ReadingProps = {
 };
 
 export default function Reading() {
+  const serialsRepository = new AsyncStorageSerialsRepository();
+
   const navigation = useNavigation<NavigationProps>();
   const route = useRoute<RouteProp<ReadingProps, "Reading">>();
   const { product } = route.params;
   const [serialsData, setSerialsData] = useState<Serial[]>([]);
 
+  //TODO: filter logic should move to a repository function
   async function loadSerials() {
-    if (product === "NEW") {
-      setSerialsData([]);
-      return;
-    }
+    const serials = await serialsRepository.list();
 
-    const dataKey = `@iubscanner/serials/${product}`;
-    const storageData = await AsyncStorage.getItem(dataKey);
-    const serials: Serial[] = storageData ? JSON.parse(storageData) : [];
+    if (product === "NEW") return setSerialsData(serials);
 
-    console.log(serials);
-    setSerialsData(serials);
+    const productSerials = serials.filter((s) => s.product === product);
+    setSerialsData(productSerials);
   }
 
   useEffect(() => {
