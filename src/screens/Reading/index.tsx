@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 import { Button } from "../../components/Button";
+import { SerialInfo } from "../../components/SerialInfo";
 import { useScan } from "../../hooks/scan";
 import { AsyncStorageSerialsRepository } from "../../repositories/SerialsRepository/AsyncStorageSerialsRepository";
 import {
@@ -16,7 +17,6 @@ import {
   ScreenTitle,
   ScannerWrapper,
   ReadingInfoContainer,
-  SerialNumber,
   Footer,
 } from "./styles";
 
@@ -59,6 +59,9 @@ export default function Reading() {
     }, [])
   );
 
+  async function handleDeleteSerial(serial: string) {
+    Alert.alert("deveria apagar", `o produto: ${serial}`);
+  }
   return (
     <Container>
       <Header>
@@ -66,8 +69,12 @@ export default function Reading() {
       </Header>
       <ScannerWrapper>
         <ReadingInfoContainer>
-          {serialsData.map((s, i) => (
-            <SerialNumber key={`${s.id}${i}`}> {s.id} </SerialNumber>
+          {serialsData.map((s) => (
+            <SerialInfo
+              serial={s.id}
+              key={s.id}
+              handleDelete={handleDeleteSerial}
+            />
           ))}
         </ReadingInfoContainer>
         <Button title="SCAN" onPress={() => navigation.navigate("Scan")} />

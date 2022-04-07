@@ -1,29 +1,32 @@
 import React from "react";
 import { IconButton } from "../IconButton";
 
-import { Container, ProductInfoText, ButtonsWrapper } from "./styles";
+import {
+  Container,
+  ButtonsWrapper,
+  ProductText,
+  DateText,
+  TimeText,
+  SeqText,
+  SerialWrapper,
+} from "./styles";
 
 interface ProductInfoCardProps {
-  product: string;
-  quantity?: number;
+  serial: string;
   handleDelete(product: string): Promise<void>;
-  handleEdit(product: string): void;
 }
 
-export function ProductInfoCard({
-  product,
-  quantity,
-  handleDelete,
-  handleEdit,
-}: ProductInfoCardProps) {
+export function SerialInfo({ serial, handleDelete }: ProductInfoCardProps) {
   return (
     <Container>
-      <ProductInfoText>
-        {product} - {quantity}
-      </ProductInfoText>
+      <SerialWrapper>
+        <ProductText>{serial.substring(0, 6)}</ProductText>
+        <DateText>{serial.substring(6, 14)}</DateText>
+        <TimeText>{serial.substring(14, 20)}</TimeText>
+        <SeqText>{serial.substring(20, 24)}</SeqText>
+      </SerialWrapper>
       <ButtonsWrapper>
-        <IconButton iconName="edit" onPress={() => handleEdit(product)} />
-        <IconButton iconName="trash-2" onPress={() => handleDelete(product)} />
+        <IconButton iconName="trash-2" onPress={() => handleDelete(serial)} />
       </ButtonsWrapper>
     </Container>
   );
