@@ -4,6 +4,8 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const ScreenTitle = styled.Text`
@@ -18,9 +20,12 @@ export const Header = styled.View`
   margin-top: 35px;
 `;
 
+export const TopInfoWrapper = styled.View`
+  width: 100%;
+`;
+
 export const ScannerWrapper = styled.View`
   width: 100%;
-  flex: 1;
 `;
 
 export const ReadingInfoContainer = styled.View``;

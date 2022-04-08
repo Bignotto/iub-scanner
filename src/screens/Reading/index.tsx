@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 import { Button } from "../../components/Button";
+import LastProductAcquired from "../../components/LastProductAcquired";
 import { SerialInfo } from "../../components/SerialInfo";
 import { useScan } from "../../hooks/scan";
 import { AsyncStorageSerialsRepository } from "../../repositories/SerialsRepository/AsyncStorageSerialsRepository";
@@ -18,6 +19,7 @@ import {
   ScannerWrapper,
   ReadingInfoContainer,
   Footer,
+  TopInfoWrapper,
 } from "./styles";
 
 type NavigationProps = {
@@ -32,7 +34,12 @@ type ReadingProps = {
 };
 
 export default function Reading() {
+  //TODO: move repository dependency from screen implementation
   const serialsRepository = new AsyncStorageSerialsRepository();
+
+  const { getLast } = useScan();
+
+  const { lastSerial, lastProduct } = getLast();
 
   const navigation = useNavigation<NavigationProps>();
   const route = useRoute<RouteProp<ReadingProps, "Reading">>();
@@ -67,7 +74,11 @@ export default function Reading() {
       <Header>
         <ScreenTitle>Leitura</ScreenTitle>
       </Header>
+
       <ScannerWrapper>
+        <TopInfoWrapper>
+          <LastProductAcquired product={lastProduct} />
+        </TopInfoWrapper>
         <ReadingInfoContainer>
           {serialsData.map((s) => (
             <SerialInfo
