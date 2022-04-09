@@ -8,16 +8,22 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 import { Button } from "../../components/Button";
+import LastProductAcquired from "../../components/LastProductAcquired";
+import LastSerialAcuired from "../../components/LastSerialAcquired";
+import SerialCounter from "../../components/SerialCounter";
+import { SerialInfo } from "../../components/SerialInfo";
 import { useScan } from "../../hooks/scan";
 import { AsyncStorageSerialsRepository } from "../../repositories/SerialsRepository/AsyncStorageSerialsRepository";
 import {
   Container,
   Header,
   ScreenTitle,
-  ScannerWrapper,
-  ReadingInfoContainer,
-  SerialNumber,
+  Content,
+  AcquiredSerialsContainer,
   Footer,
+  TopInfoWrapper,
+  RightBlockWrapper,
+  LeftBlockWrapper,
 } from "./styles";
 
 type NavigationProps = {
@@ -32,7 +38,12 @@ type ReadingProps = {
 };
 
 export default function Reading() {
+  //TODO: move repository dependency from screen implementation
   const serialsRepository = new AsyncStorageSerialsRepository();
+
+  const { getLast } = useScan();
+
+  const { lastSerial, lastProduct } = getLast();
 
   const navigation = useNavigation<NavigationProps>();
   const route = useRoute<RouteProp<ReadingProps, "Reading">>();
@@ -59,19 +70,37 @@ export default function Reading() {
     }, [])
   );
 
+  async function handleDeleteSerial(serial: string) {
+    Alert.alert("deveria apagar", `o produto: ${serial}`);
+  }
   return (
     <Container>
       <Header>
         <ScreenTitle>Leitura</ScreenTitle>
       </Header>
-      <ScannerWrapper>
-        <ReadingInfoContainer>
+
+      <Content>
+        <TopInfoWrapper>
+          <LeftBlockWrapper>
+            <SerialCounter quantity={serialsData.length} />
+          </LeftBlockWrapper>
+          <RightBlockWrapper>
+            <LastProductAcquired product={lastProduct} />
+            <LastSerialAcuired serial={lastSerial} />
+          </RightBlockWrapper>
+        </TopInfoWrapper>
+        <AcquiredSerialsContainer>
           {serialsData.map((s, i) => (
-            <SerialNumber key={`${s.id}${i}`}> {s.id} </SerialNumber>
+            //BIG: remove index from key parameter
+            <SerialInfo
+              serial={s.id}
+              key={`${s.id}${i}`}
+              handleDelete={handleDeleteSerial}
+            />
           ))}
-        </ReadingInfoContainer>
+        </AcquiredSerialsContainer>
         <Button title="SCAN" onPress={() => navigation.navigate("Scan")} />
-      </ScannerWrapper>
+      </Content>
       <Footer>
         <Button title="Voltar" onPress={() => navigation.goBack()} />
       </Footer>

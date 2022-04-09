@@ -4,6 +4,8 @@ import styled from "styled-components/native";
 export const Container = styled.View`
   flex: 1;
   background-color: ${({ theme }) => theme.colors.background};
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 export const ScreenTitle = styled.Text`
@@ -18,14 +20,31 @@ export const Header = styled.View`
   margin-top: 35px;
 `;
 
-export const ScannerWrapper = styled.View`
+export const TopInfoWrapper = styled.View`
   width: 100%;
-  flex: 1;
+  flex-direction: row;
+  justify-content: space-between;
 `;
 
-export const ReadingInfoContainer = styled.View``;
+export const LeftBlockWrapper = styled.View`
+  width: 20%;
+`;
 
-export const SerialNumber = styled.Text``;
+export const RightBlockWrapper = styled.View`
+  flex-direction: column;
+  align-items: center;
+`;
+
+export const Content = styled.View`
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: red;
+`;
+
+export const AcquiredSerialsContainer = styled.View`
+  flex: 1;
+`;
 
 export const Footer = styled.View`
   width: 100%;
