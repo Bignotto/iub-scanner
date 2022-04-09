@@ -22,6 +22,16 @@ export const Header = styled.View`
 
 export const TopInfoWrapper = styled.View`
   width: 100%;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
+export const LeftBlockWrapper = styled.View`
+  width: 20%;
+`;
+
+export const RightBlockWrapper = styled.View`
+  flex-direction: column;
 `;
 
 export const ScannerWrapper = styled.View`

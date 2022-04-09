@@ -8,11 +8,6 @@ interface ScanProviderProps {
   children: ReactNode;
 }
 
-interface SerialDataProps {
-  product: string;
-  quantity: number;
-}
-
 interface IScanContextData {
   isLoading: boolean;
   handleScan(scannedText: string): Promise<void>;
@@ -35,8 +30,6 @@ function ScanProvider({ children }: ScanProviderProps) {
     }
     const scannedProduct = scannedText.substring(0, 6);
 
-    setLastProduct(scannedProduct);
-
     try {
       await serialsRepository.create(scannedText, scannedProduct);
     } catch (error) {
@@ -45,7 +38,8 @@ function ScanProvider({ children }: ScanProviderProps) {
     } finally {
       setIsLoading(false);
     }
-
+    setLastProduct(scannedProduct);
+    setLastSerial(scannedText);
     return Alert.alert("Válido!", `Produto ${scannedProduct}`);
   }
 

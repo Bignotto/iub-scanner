@@ -9,6 +9,8 @@ import { Alert } from "react-native";
 
 import { Button } from "../../components/Button";
 import LastProductAcquired from "../../components/LastProductAcquired";
+import LastSerialAcuired from "../../components/LastSerialAcquired";
+import SerialCounter from "../../components/SerialCounter";
 import { SerialInfo } from "../../components/SerialInfo";
 import { useScan } from "../../hooks/scan";
 import { AsyncStorageSerialsRepository } from "../../repositories/SerialsRepository/AsyncStorageSerialsRepository";
@@ -20,6 +22,8 @@ import {
   ReadingInfoContainer,
   Footer,
   TopInfoWrapper,
+  RightBlockWrapper,
+  LeftBlockWrapper,
 } from "./styles";
 
 type NavigationProps = {
@@ -77,7 +81,13 @@ export default function Reading() {
 
       <ScannerWrapper>
         <TopInfoWrapper>
-          <LastProductAcquired product={lastProduct} />
+          <LeftBlockWrapper>
+            <SerialCounter quantity={serialsData.length} />
+          </LeftBlockWrapper>
+          <RightBlockWrapper>
+            <LastProductAcquired product={lastProduct} />
+            <LastSerialAcuired serial={lastSerial} />
+          </RightBlockWrapper>
         </TopInfoWrapper>
         <ReadingInfoContainer>
           {serialsData.map((s) => (

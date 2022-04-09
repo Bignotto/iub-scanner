@@ -16,7 +16,7 @@ export const Title = styled.Text`
   color: ${({ theme }) => theme.colors.title};
 `;
 
-export const ProductText = styled.Text`
+export const QuantityText = styled.Text`
   font-family: ${({ theme }) => theme.fonts.inconsolata.bold};
   font-size: ${RFValue(26)}px;
   color: ${({ theme }) => theme.colors.title};
