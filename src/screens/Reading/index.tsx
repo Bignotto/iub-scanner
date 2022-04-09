@@ -18,8 +18,8 @@ import {
   Container,
   Header,
   ScreenTitle,
-  ScannerWrapper,
-  ReadingInfoContainer,
+  Content,
+  AcquiredSerialsContainer,
   Footer,
   TopInfoWrapper,
   RightBlockWrapper,
@@ -79,7 +79,7 @@ export default function Reading() {
         <ScreenTitle>Leitura</ScreenTitle>
       </Header>
 
-      <ScannerWrapper>
+      <Content>
         <TopInfoWrapper>
           <LeftBlockWrapper>
             <SerialCounter quantity={serialsData.length} />
@@ -89,17 +89,18 @@ export default function Reading() {
             <LastSerialAcuired serial={lastSerial} />
           </RightBlockWrapper>
         </TopInfoWrapper>
-        <ReadingInfoContainer>
-          {serialsData.map((s) => (
+        <AcquiredSerialsContainer>
+          {serialsData.map((s, i) => (
+            //BIG: remove index from key parameter
             <SerialInfo
               serial={s.id}
-              key={s.id}
+              key={`${s.id}${i}`}
               handleDelete={handleDeleteSerial}
             />
           ))}
-        </ReadingInfoContainer>
+        </AcquiredSerialsContainer>
         <Button title="SCAN" onPress={() => navigation.navigate("Scan")} />
-      </ScannerWrapper>
+      </Content>
       <Footer>
         <Button title="Voltar" onPress={() => navigation.goBack()} />
       </Footer>

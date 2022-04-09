@@ -2,7 +2,6 @@ import { RFValue } from "react-native-responsive-fontsize";
 import styled from "styled-components/native";
 
 export const Container = styled.View`
-  height: 50px;
   width: 250px;
   flex-direction: column;
   justify-content: space-between;

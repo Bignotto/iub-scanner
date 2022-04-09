@@ -32,13 +32,19 @@ export const LeftBlockWrapper = styled.View`
 
 export const RightBlockWrapper = styled.View`
   flex-direction: column;
+  align-items: center;
 `;
 
-export const ScannerWrapper = styled.View`
-  width: 100%;
+export const Content = styled.View`
+  flex: 1;
+  flex-direction: column;
+  justify-content: space-between;
+  background-color: red;
 `;
 
-export const ReadingInfoContainer = styled.View``;
+export const AcquiredSerialsContainer = styled.View`
+  flex: 1;
+`;
 
 export const Footer = styled.View`
   width: 100%;
