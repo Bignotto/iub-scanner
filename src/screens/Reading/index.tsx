@@ -8,6 +8,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { Alert } from "react-native";
 
 import { Button } from "../../components/Button";
+import InputForm from "../../components/InputForm";
 import LastProductAcquired from "../../components/LastProductAcquired";
 import LastSerialAcuired from "../../components/LastSerialAcquired";
 import SerialCounter from "../../components/SerialCounter";
@@ -89,6 +90,7 @@ export default function Reading() {
             <LastSerialAcuired serial={lastSerial} />
           </RightBlockWrapper>
         </TopInfoWrapper>
+        <InputForm />
         <AcquiredSerialsContainer>
           {serialsData.map((s, i) => (
             //BIG: remove index from key parameter
