@@ -50,6 +50,7 @@ export default function Reading() {
   const route = useRoute<RouteProp<ReadingProps, "Reading">>();
   const { product } = route.params;
   const [serialsData, setSerialsData] = useState<Serial[]>([]);
+  const { acquiredSerials } = useScan();
 
   //TODO: filter logic should move to a repository function
   async function loadSerials() {
@@ -62,18 +63,22 @@ export default function Reading() {
   }
 
   useEffect(() => {
-    loadSerials();
+    //loadSerials();
+    setSerialsData(acquiredSerials);
   }, []);
 
   useFocusEffect(
     useCallback(() => {
-      loadSerials();
+      //loadSerials();
+      setSerialsData(acquiredSerials);
     }, [])
   );
 
   async function handleDeleteSerial(serial: string) {
     Alert.alert("deveria apagar", `o produto: ${serial}`);
   }
+
+  //TODO: should not show serial input form and scan button when product != "NEW"
   return (
     <Container>
       <Header>

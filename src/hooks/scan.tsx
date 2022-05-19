@@ -1,8 +1,16 @@
-import { createContext, ReactNode, useContext, useState } from "react";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { Alert } from "react-native";
 import { AsyncStorageSerialsRepository } from "../repositories/SerialsRepository/AsyncStorageSerialsRepository";
+import { useFocusEffect } from "@react-navigation/native";
 
 interface ScanProviderProps {
   children: ReactNode;
@@ -12,6 +20,7 @@ interface IScanContextData {
   isLoading: boolean;
   handleScan(scannedText: string): Promise<void>;
   getLast(): { lastSerial: string; lastProduct: string };
+  acquiredSerials: Serial[];
 }
 
 const ScanContext = createContext({} as IScanContextData);
@@ -21,6 +30,23 @@ function ScanProvider({ children }: ScanProviderProps) {
   const [isLoading, setIsLoading] = useState(true);
   const [lastProduct, setLastProduct] = useState("");
   const [lastSerial, setLastSerial] = useState("");
+  const [serials, setSerials] = useState<Serial[]>([]);
+
+  async function loadSerials() {
+    const storageSerials = await serialsRepository.list();
+
+    setSerials(storageSerials);
+  }
+
+  useEffect(() => {
+    loadSerials();
+  }, []);
+
+  useFocusEffect(
+    useCallback(() => {
+      loadSerials();
+    }, [])
+  );
 
   //TODO: move serial validation from here to domain layer
   async function handleScan(scannedText: string) {
@@ -32,6 +58,8 @@ function ScanProvider({ children }: ScanProviderProps) {
 
     try {
       await serialsRepository.create(scannedText, scannedProduct);
+      const serialsArray = await serialsRepository.list();
+      setSerials(serialsArray);
     } catch (error) {
       console.log(error);
       Alert.alert("Algum proglema com async storage");
@@ -51,7 +79,9 @@ function ScanProvider({ children }: ScanProviderProps) {
   }
 
   return (
-    <ScanContext.Provider value={{ isLoading, handleScan, getLast }}>
+    <ScanContext.Provider
+      value={{ isLoading, handleScan, getLast, acquiredSerials: serials }}
+    >
       {children}
     </ScanContext.Provider>
   );
